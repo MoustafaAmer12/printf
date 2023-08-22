@@ -6,23 +6,23 @@
  *
  * Return: the number of bytes printed.
  */
-int (*get_specifier(char *s))(va_list place_holders)
+int (*get_specifier(char *s))(va_list ap, params_t *params)
 {
 	specifier_t specifiers[] = {
 		{"c", print_char},
 		{"d", print_int},
 		{"i", print_int},
-		{"s", print_str},
+		{"s", print_string},
 		{"%", print_percent},
 		{"b", print_binary},
 		{"o", print_octal},
 		{"u", print_unsigned},
 		{"x", print_hex},
-		{"X", print_hexC},
-		{"p", print_addr},
+		{"X", print_HEX},
+		{"p", print_address},
 		{"S", print_S},
 		{"r", print_rev},
-		{"R", print_rot},
+		{"R", print_rot13},
 		{NULL, NULL}
 	};
 	int i = 0;
@@ -39,25 +39,26 @@ int (*get_specifier(char *s))(va_list place_holders)
 }
 
 /**
- * get_print_func - finds the formatfunc
+ * get_print_func - finds the format func
  * @s: the format string
- * @place_holders: the arguments given
+ * @ap: the arguments given
  *
  * Return: number of bytes printed
  */
-int get_print_func(char *s, va_list place_holders)
+int get_print_func(char *s, va_list ap, params_t *params)
 {
-	int (*f)(va_list) = get_specifier(s);
+	int (*f)(va_list, params_t *) = get_specifier(s);
 
 	if (f)
-		return (f(place_holders));
+		return (f(ap, params));
 	return (0);
 }
 
 /**
- * *get_flag - finds the flag func
+ * get_flag - finds the flag func
  * @s: format string
  * @params: params struct
+ *
  * Return: if flag was valid
  */
 
@@ -89,7 +90,8 @@ int get_flag(char *s, params_t *params)
 /**
  * get_modifier - finds modifier func
  * @s: format string
- * @params: params strucr
+ * @params: params struct
+ *
  * Return: if modifier was valid
  */
 int get_modifier(char *s, params_t *params)
@@ -121,7 +123,7 @@ char *get_width(char *s, params_t *params, va_list ap)
 
 	if (*s == '*')
 	{
-		d = va_arg(ap. int);
+		d = va_arg(ap, int);
 		s++;
 	}
 	else
@@ -130,5 +132,5 @@ char *get_width(char *s, params_t *params, va_list ap)
 			d = d * 10 + (*s++ - '0');
 	}
 	params->width = d;
-	return (S);
+	return (s);
 }
