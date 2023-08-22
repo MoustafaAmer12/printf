@@ -1,42 +1,46 @@
 #include "main.h"
 
 /**
- * _printf - a prototye function of printf
- * @format: the format string to be printed
- * @...: the number of parameters given to the string
- *
- * Return: Length of the string printed
+ * _printf - print function
+ * @format: the format string
+ * Return: number of bytes printed
  */
 
 int _printf(const char *format, ...)
 {
-	int len = 0, i;
-	int variables = 0;
-	va_list place_holders;
-	
-	if (!format || (format[0] == '%' && !forrmat[1]))
-	       return (-1);
+	int sum = 0;
+	va_list ap;
+	char *p, *start;
+	params_t params = PARAMS_INIT;
+
+	va_start(ap, format);
+
+	if (!format || (format[0] == '%' && !format[1]))
+		return (-1);
 	if (format[0] == '%' && format[1] == ' ' && !format[2])
 		return (-1);
-
-	for (i = 0; i < strlen(format); i++)
+	for (p = (char *)format; *p; p++)
 	{
-		if (format[i] == '%')
+		init_params(&params, ap);
+		if (*p != '%')
 		{
-			variables++;
-			i++;
+			sum += _putchar(*p);
+			continue;
 		}
+		start = p;
+		p++;
+		while (get_flag(p, &params))
+		{
+			p++;
+		}
+		p = get_width(p, &params, ap);
+		p = get_precision(p, &params, ap);
+		if (get_modifier(p, &params))
+			p++;
+		if (!get_specifier(p))
+			sum += get_print_func(p, ap, &params);
 	}
-	if (!variables)
-	{
-		_puts(format);
-		return (strlen(format));
-	}
-	va_start(place_holders, variables);
-	
-	
-	
-	va_end(place_holders);
-	}
-	return (len);
+	_putchar(BUF_FLUSH);
+	va_end(ap);
+	return (sum);
 }
