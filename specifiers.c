@@ -42,7 +42,7 @@ int (*get_specifier(char *s))(va_list ap, params_t *params)
  * get_print_func - finds the format func
  * @s: the format string
  * @ap: the arguments given
- *
+ * @params: the parameters structure
  * Return: number of bytes printed
  */
 int get_print_func(char *s, va_list ap, params_t *params)
