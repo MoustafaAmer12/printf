@@ -26,3 +26,4 @@ char *get_precision(char *p, params_t *params, va_list ap)
 	}
 	params->precision = d;
 	return (p);
+}
